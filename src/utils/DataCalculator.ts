@@ -34,7 +34,6 @@ export const CalculateHeuristicCallTimesStdDev = (recordsList: instanceRecords[]
 };
 
 export const analyzeHeuristicCallTimesByDomain=(data: instanceRecords[]): HeuristicDomainAnalysis[]=> {
-  console.log(data);
   
   const groupedData: Record<string, Record<string, {
     records: instanceRecords[],

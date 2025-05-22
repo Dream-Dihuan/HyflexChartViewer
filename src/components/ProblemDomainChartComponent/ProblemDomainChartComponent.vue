@@ -12,7 +12,7 @@
           <tr>
             <th>Heuristic (Instance)</th>
             <th>平均调用次数</th>
-            <th>调用次数方差</th>
+            <!-- <th>调用次数方差</th> -->
             <th>调用次数标准差</th>
             <th>实例分数</th>
             <th>总得分</th>
@@ -22,7 +22,7 @@
           <tr v-for="(item, index) in props.data?.instanceInfo" :key="index">
             <td>{{ item.heuristic }} ({{ item.instance }})</td>
             <td>{{ item.heuristicCallTimesAverage }}</td>
-            <td>{{ item.heuristicCallTimesVariance }}</td>
+            <!-- <td>{{ item.heuristicCallTimesVariance }}</td> -->
             <td>{{ item.heuristicCallTimesStdDev }}</td>
             <td>{{ item.instanceScore }}</td>
             <td>{{ item.totalScore }}</td>
@@ -44,6 +44,7 @@ import {
 import { BarChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import InstanceSelectorComponent from '../InstanceSelectorComponent.vue'
 
 // 注册模块
 echarts.use([
@@ -62,7 +63,7 @@ export type ProblemInfo = {
   heuristic: string
   instance: string
   heuristicCallTimesAverage: number
-  heuristicCallTimesVariance: number
+  // heuristicCallTimesVariance: number
   heuristicCallTimesStdDev: number
   instanceScore: number
   totalScore: number
@@ -99,7 +100,7 @@ const initChart = () => {
 
   // 数据提取
   const average = props.data.instanceInfo.map(item => item.heuristicCallTimesAverage)
-  const variance = props.data.instanceInfo.map(item => item.heuristicCallTimesVariance)
+  // const variance = props.data.instanceInfo.map(item => item.heuristicCallTimesVariance)
   const stdDev = props.data.instanceInfo.map(item => item.heuristicCallTimesStdDev)
   const instanceScore = props.data.instanceInfo.map(item => item.instanceScore)
   const totalScore = props.data.instanceInfo.map(item => item.totalScore)
@@ -114,7 +115,7 @@ const initChart = () => {
     legend: {
       data: [
         '平均调用次数',
-        '调用次数方差',
+        // '调用次数方差',
         '调用次数标准差',
         '实例分数',
         '总得分'
@@ -159,12 +160,12 @@ const initChart = () => {
         label: labelOption,
         data: average
       },
-      {
-        name: '调用次数方差',
-        type: 'bar',
-        label: labelOption,
-        data: variance
-      },
+      // {
+      //   name: '调用次数方差',
+      //   type: 'bar',
+      //   label: labelOption,
+      //   data: variance
+      // },
       {
         name: '调用次数标准差',
         type: 'bar',

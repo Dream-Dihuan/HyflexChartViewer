@@ -1,8 +1,17 @@
+
 import type { DetailAnalyseInfo, HeuristicDomainAnalysis } from "@/types/DetailAnalyseInfo";
 import type { instanceGroupItem, instanceInfo, instanceRecords } from "@/types/InstanceRecords"
+// 平均实例分数
+export const CountInstanceScoreAverage = (reocrdsList:instanceInfo[]):number =>{
+  let size = reocrdsList.length;
+  let sum = 0;
+  reocrdsList.forEach(item=>{
+    sum+=item.instanceScore
+  })
+  return sum/size;
+}
 
-
-// 平均数
+// 平均调用次数数
 export const CountHeuristicCallTimesAverage = (reocrdsList:instanceInfo[]):number =>{
   let size = reocrdsList.length;
   let sum = 0;
@@ -13,7 +22,7 @@ export const CountHeuristicCallTimesAverage = (reocrdsList:instanceInfo[]):numbe
 }
 
 // 方差
-export const CalculateHeuristicCallTimesVariance = (recordsList: instanceRecords[]): number => {
+export const CalculateHeuristicCallTimesVariance = (recordsList: instanceInfo[]): number => {
   const size = recordsList.length;
   if (size === 0) return 0;
 
@@ -28,7 +37,7 @@ export const CalculateHeuristicCallTimesVariance = (recordsList: instanceRecords
 };
 
 // 标准差
-export const CalculateHeuristicCallTimesStdDev = (recordsList: instanceRecords[]): number => {
+export const CalculateHeuristicCallTimesStdDev = (recordsList: instanceInfo[]): number => {
   const variance = CalculateHeuristicCallTimesVariance(recordsList);
   return Math.sqrt(variance);
 };

@@ -16,10 +16,7 @@ import {
 import { BarChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { type DetailAnalyseInfo, type HeuristicDomainAnalysis } from '@/types/DetailAnalyseInfo'
-import { analyzeHeuristicCallTimesByDomain } from '@/utils/DataCalculator'
-// import { log } from 'echarts/types/src/util/log.js'
-
+import { type DetailAnalyseInfo } from '@/types/DetailAnalyseInfo'
 let props = defineProps<{
   // instancePerQuestion: number,
   recordsList: DetailAnalyseInfo[],

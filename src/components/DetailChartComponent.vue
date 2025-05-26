@@ -1,7 +1,10 @@
 <template>
-  <h3 style="text-align: center;">{{ props.heuristic }} 算法(总分:{{ props.totalScore }})下的 {{ props.problemDomain }} 问题的
-    实例分析
+  <h3 style="text-align: center;">Instance analysis of {{ props.problemDomain }} problem under {{ props.heuristic }}
+    algorithm (Unit metric score: {{ props.totalScore }})
   </h3>
+  <!-- <h3 style="text-align: center;">{{ props.heuristic }} 算法(总分:{{ props.totalScore }})下的 {{ props.problemDomain }} 问题的
+    实例分析
+  </h3> -->
   <div id="main" ref="chartDom" style="width: 100%; height: 500px;"></div>
 </template>
 
@@ -108,7 +111,7 @@ const initChart = () => {
       }
     },
     legend: {
-      data: ['平均调用次数', '调用次数方差', '调用次数标准差', '实例分数']
+      data: ['Average call count', 'Call count variance', 'Call count standard deviation', 'Instance score']
     },
     toolbox: {
       show: true,
@@ -138,7 +141,7 @@ const initChart = () => {
     ],
     series: [
       {
-        name: '平均调用次数',
+        name: 'Average call count',
         type: 'bar',
         barGap: 0,
         label: labelOption,
@@ -148,7 +151,7 @@ const initChart = () => {
         data: props.recordsList.map(item => item.heuristicCallTimesAverage)
       },
       {
-        name: '调用次数方差',
+        name: 'Call count variance',
         type: 'bar',
         label: labelOption,
         emphasis: {
@@ -157,7 +160,7 @@ const initChart = () => {
         data: props.recordsList.map(item => item.heuristicCallTimesVariance)
       },
       {
-        name: '调用次数标准差',
+        name: 'Call count standard deviation',
         type: 'bar',
         label: labelOption,
         emphasis: {
@@ -166,7 +169,7 @@ const initChart = () => {
         data: props.recordsList.map(item => item.heuristicCallTimesStdDev)
       },
       {
-        name: '实例分数',
+        name: 'Instance score',
         type: 'bar',
         label: labelOption,
         emphasis: {

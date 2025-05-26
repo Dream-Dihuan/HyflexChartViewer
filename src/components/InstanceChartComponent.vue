@@ -1,5 +1,8 @@
 <template>
-  <h3 style="text-align: center;">{{props.recordsItem.heuristic}} 算法下的 {{props.recordsItem.problemDomain}} 问题的 {{props.recordsItem.instance}} 实例分析</h3>
+  <!-- <h3 style="text-align: center;">{{props.recordsItem.heuristic}} 算法下的 {{props.recordsItem.problemDomain}} 问题的 {{props.recordsItem.instance}} 实例分析</h3> -->
+  <h3 style="text-align: center;">Analysis of the {{ props.recordsItem.instance }} instance of the
+    {{ props.recordsItem.problemDomain }} problem under the
+    {{ props.recordsItem.heuristic }} Hyper-Heuristic</h3>
   <div ref="chartDom" class="chart-container"></div>
 </template>
 
@@ -21,7 +24,7 @@ let myChart = null;
 const createOption = () => {
   // 准备x轴数据 (实例名称)
   const xAxisData = props.recordsItem.instanceInfo.map(item => item.run);
-  
+
   // 准备y轴数据 (每个实例的平均启发式调用次数)
   const seriesData = props.recordsItem.instanceInfo.map(item => item.heuristicCallTimes);
 

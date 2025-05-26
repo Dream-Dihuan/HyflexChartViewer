@@ -1,7 +1,8 @@
-<template>
+<template v-if="props.data.length!=0">
   <div>
-    <h3 style="text-align: center;">{{ props.data?.problemDomain }} 问题的实例分析</h3>
-
+    <!-- <h3 style="text-align: center;">{{ props.data[0]?.problemDomain }} 问题下的 {{ props.data[0]?.instance }} 实例分析</h3> -->
+    <h3 style="text-align: center;"> Analysis of the {{ props.data[0]?.instance }} instance under the {{
+      props.data[0]?.problemDomain }} problemDomain</h3>
     <!-- 图表 -->
     <div id="main" ref="chartDom" style="width: 100%; height: 500px;"></div>
 
@@ -10,22 +11,22 @@
       <table border="1" style="width: 100%; text-align: center; border-collapse: collapse;">
         <thead>
           <tr>
-            <th>Heuristic (Instance)</th>
-            <th>平均调用次数</th>
+            <th>Hyper-Heuristics (Instance)</th>
+            <th> Average call count</th>
             <!-- <th>调用次数方差</th> -->
-            <th>调用次数标准差</th>
-            <th>实例分数</th>
-            <th>总得分</th>
+            <th>Call count standard deviation</th>
+            <th>Instance score</th>
+            <th>Unit metric score</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in props.data?.instanceInfo" :key="index">
+          <tr v-for="(item, index) in props.data" :key="index">
             <td>{{ item.heuristic }} ({{ item.instance }})</td>
-            <td>{{ item.heuristicCallTimesAverage }}</td>
+            <td>{{ CountHeuristicCallTimesAverage(item.instanceInfo) }}</td>
             <!-- <td>{{ item.heuristicCallTimesVariance }}</td> -->
-            <td>{{ item.heuristicCallTimesStdDev }}</td>
-            <td>{{ item.instanceScore }}</td>
-            <td>{{ item.totalScore }}</td>
+            <td>{{ CalculateHeuristicCallTimesStdDev(item.instanceInfo) }}</td>
+            <td>{{ CountInstanceScoreAverage(item.instanceInfo) }}</td>
+            <td>{{ item.instanceInfo[0].totalScore }}</td>
           </tr>
         </tbody>
       </table>
@@ -45,6 +46,8 @@ import { BarChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import InstanceSelectorComponent from '../InstanceSelectorComponent.vue'
+import type { instanceGroupItem } from '@/types/InstanceRecords'
+import { CalculateHeuristicCallTimesStdDev, CountHeuristicCallTimesAverage, CountInstanceScoreAverage } from '@/utils/DataCalculator'
 
 // 注册模块
 echarts.use([
@@ -59,28 +62,28 @@ echarts.use([
 const chartDom = ref<HTMLDivElement | null>(null)
 let myChart: echarts.ECharts | null = null
 
-export type ProblemInfo = {
-  heuristic: string
-  instance: string
-  heuristicCallTimesAverage: number
-  // heuristicCallTimesVariance: number
-  heuristicCallTimesStdDev: number
-  instanceScore: number
-  totalScore: number
-}
+// export type ProblemInfo = {
+//   heuristic: string
+//   instance: string
+//   heuristicCallTimesAverage: number
+//   // heuristicCallTimesVariance: number
+//   heuristicCallTimesStdDev: number
+//   instanceScore: number
+//   totalScore: number
+// }
 
-export type ProblemGroupItem = {
-  problemDomain: string
-  instanceInfo: ProblemInfo[]
-}
+// export type ProblemGroupItem = {
+//   problemDomain: string
+//   instanceInfo: ProblemInfo[]
+// }
 
 const props = defineProps<{
-  data: ProblemGroupItem
+  data: instanceGroupItem[]
 }>()
 
 // 初始化图表
 const initChart = () => {
-  if (!chartDom.value || !props.data?.instanceInfo) return
+  if (!chartDom.value || !props.data) return
 
   const labelOption = {
     show: true,
@@ -93,17 +96,22 @@ const initChart = () => {
   }
 
   // 横坐标名称：heuristic(instance)
-  const xAxisData = props.data.instanceInfo.map(
+  const xAxisData = props.data.map(
     // item => `${item.heuristic} (${item.instance})`
     item => item.heuristic
   )
 
   // 数据提取
-  const average = props.data.instanceInfo.map(item => item.heuristicCallTimesAverage)
+  // const average = props.data.instanceInfo.map(item => item.heuristicCallTimesAverage)
   // const variance = props.data.instanceInfo.map(item => item.heuristicCallTimesVariance)
-  const stdDev = props.data.instanceInfo.map(item => item.heuristicCallTimesStdDev)
-  const instanceScore = props.data.instanceInfo.map(item => item.instanceScore)
-  const totalScore = props.data.instanceInfo.map(item => item.totalScore)
+  // const stdDev = props.data.instanceInfo.map(item => item.heuristicCallTimesStdDev)
+  // const instanceScore = props.data.instanceInfo.map(item => item.instanceScore)
+
+
+  const average = props.data.map(item => CountHeuristicCallTimesAverage(item.instanceInfo))
+  const stdDev = props.data.map(item => CalculateHeuristicCallTimesStdDev(item.instanceInfo))
+  const instanceScore = props.data.map(item => CountInstanceScoreAverage(item.instanceInfo))
+  const totalScore = props.data.map(item => item.instanceInfo[0].totalScore)
 
   const option: echarts.EChartsOption = {
     tooltip: {
@@ -114,11 +122,11 @@ const initChart = () => {
     },
     legend: {
       data: [
-        '平均调用次数',
+        'Average call count',
         // '调用次数方差',
-        '调用次数标准差',
-        '实例分数',
-        '总得分'
+        'Call count standard deviation',
+        'Instance score',
+        'Unit metric score'
       ]
     },
     toolbox: {
@@ -144,18 +152,18 @@ const initChart = () => {
     yAxis: [
       {
         type: 'value',
-        name: '次数统计'
+        name: 'Call times'
       },
       {
         type: 'value',
-        name: '得分',
+        name: 'Score',
         min: 0,
         max: 1
       }
     ],
     series: [
       {
-        name: '平均调用次数',
+        name: 'Average call count',
         type: 'bar',
         label: labelOption,
         data: average
@@ -167,20 +175,20 @@ const initChart = () => {
       //   data: variance
       // },
       {
-        name: '调用次数标准差',
+        name: 'Call count standard deviation',
         type: 'bar',
         label: labelOption,
         data: stdDev
       },
       {
-        name: '实例分数',
+        name: 'Instance score',
         type: 'bar',
         label: labelOption,
         data: instanceScore,
         yAxisIndex: 1
       },
       {
-        name: '总得分',
+        name: 'Unit metric score',
         type: 'bar',
         label: labelOption,
         data: totalScore,

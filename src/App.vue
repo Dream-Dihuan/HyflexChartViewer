@@ -2,25 +2,25 @@
   <div id="detailChart">
     <el-card class="content">
       <el-form :model="setting_content" label-width="150">
-        <el-form-item label="展示图像类型">
+        <el-form-item label="Display image type">
           <el-radio-group v-model="radio_value" size="large">
-            <el-radio-button label="算法中问题的实例详细分析" value="detail" />
-            <el-radio-button label="算法下的问题的单个实例调用次数分析" value="instance" />
-            <el-radio-button label="问题的方法信息统计" value="ProblemDomain" />
-            <el-radio-button label="热力图绘制" value="HeatMap" />
+            <el-radio-button label="Detailed analysis of the problem instances in the algorithm" value="detail" />
+            <el-radio-button
+              label="Analysis of the number of times a single instance of a problem is called under the algorithm"
+              value="instance" />
+            <el-radio-button label="Method information statistics of the problem" value="ProblemDomain" />
+            <el-radio-button label="Heat map plotting" value="HeatMap" />
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="工具">
-          <a href="http://www.bejson.com/explore/index_new/" target="_blank"
-            style="margin-right: 20px;">工具链接:json格式规范化在线工具</a>
+        <el-form-item label="Tool Link">
           <a href="https://github.com/Dream-Dihuan/HyflexDataCollector" target="_blank"
-            style="margin-right: 20px;">github仓库:HyflexDataCollector</a>
-          <a href="https://github.com/Dream-Dihuan/HyflexChartViewer" target="_blank"
-            style="margin-right: 20px;">github仓库:HyflexChartViewer</a>
+            style="margin-right: 20px;">github repository:HyflexDataCollector</a>
+          <a href="https://github.com/Dream-Dihuan/HyflexChartViewer" target="_blank" style="margin-right: 20px;">github
+            repository:HyflexChartViewer</a>
           <a href="https://github.com/Dream-Dihuan/HyflexScoreCalculatorJavaVersion" target="_blank"
-            style="margin-right: 20px;">github仓库:HyflexScoreCalculatorJavaVersion</a>
+            style="margin-right: 20px;">github repository:HyflexScoreCalculatorJavaVersion</a>
           <a href="https://github.com/Dream-Dihuan/HyflexScoreCalculatorPythonVersion" target="_blank"
-            style="margin-right: 20px;">github仓库:HyflexScoreCalculatorPythonVersion</a>
+            style="margin-right: 20px;">github repository:HyflexScoreCalculatorPythonVersion</a>
         </el-form-item>
       </el-form>
 
@@ -30,20 +30,20 @@
           :show-file-list="false" accept=".json,.txt">
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
-            拖拽文件到此处或<em>点击选择文件</em>
+            Drag and drop files here or <em>click to select files</em>
           </div>
           <template #tip>
             <div class="el-upload__tip">
-              请上传JSON文件（.json或.txt）
+              Please upload a JSON file (.json or .txt)
             </div>
           </template>
         </el-upload>
-        <div class="or-separator">或</div>
-        <el-input v-model="setting_content.jsonRecordsList" placeholder="请粘贴记录json对象数组，例如：[{...},{...}]" type="textarea"
+        <div class="or-separator">Or</div>
+        <el-input v-model="setting_content.jsonRecordsList"
+          placeholder=" Please paste the record json object array, for example: [{...},{...}]" type="textarea"
           :autosize="{ minRows: 4, maxRows: 10 }" />
         <el-alert v-if="parseError" :title="parseError" type="error" show-icon class="mt-2" />
       </div>
-
 
       <!-- 详情图表组件 -->
       <DetailChartComponent v-if="radio_value == 'detail'" v-for="(item, index) in detailChartData"
@@ -52,11 +52,13 @@
       <!-- 实例图表组件 -->
       <InstanceChartComponent v-if="radio_value == 'instance'" v-for="(item, index) in instanceChartData"
         :key="`instance-${index}-${item.heuristic}-${item.problemDomain}`" :recordsItem="item" />
+      <!-- <InstanceChartComponent v-if="radio_value == 'instance'" v-for="(item, index) in instanceChartData"
+        :key="`instance-${index}-${item.heuristic}-${item.problemDomain}`" :recordsItem="item" /> -->
 
       <!-- 问题图标分析-->
-      <el-card v-show="radio_value == 'ProblemDomain'">
+      <el-card v-show="radio_value == 'ProblemDomain'" style="margin-top: 20px;">
         <template #header>
-          设置
+          Setting
         </template>
         <el-row>
           <el-col :span="12">
@@ -81,7 +83,7 @@
 import { reactive, ref, watch } from 'vue';
 import DetailChartComponent from '@/components/DetailChartComponent.vue';
 import InstanceChartComponent from '@/components/InstanceChartComponent.vue';
-import ProblemDomainChartComponent from "@/components/ProblemDomainChartComponent/ProblemDomainChartComponentRefactor.vue"
+import ProblemDomainChartComponent from "@/components/ProblemDomainChartComponent/ProblemDomainChartComponent.vue"
 import type { HeuristicDomainAnalysis } from '@/types/DetailAnalyseInfo';
 import { analyzeHeuristicCallTimesByDomain, groupRecordsByHeuristicDomainAndInstance } from '@/utils/DataCalculator';
 import type { instanceGroupItem, instanceRecords } from '@/types/InstanceRecords';
@@ -148,6 +150,7 @@ watch(() => setting_content.jsonRecordsList, () => {
     if (records.length > 0) {
       classData.value = records
       detailChartData.value = analyzeHeuristicCallTimesByDomain(records)
+
       instanceChartData.value = groupRecordsByHeuristicDomainAndInstance(records)
 
     } else {

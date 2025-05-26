@@ -1,6 +1,6 @@
 <template>
   <div id="InstanceSelectorComponent">
-    <h4>题目实例设定：</h4>
+    <h4>ProblemDomain and Instance Setting：</h4>
     <el-tree style="max-width: 600px" :data="data" show-checkbox node-key="value" :props="defaultProps"
       ref="instanceTreeRef" :check-strictly="false" @check="handleCheckChange" />
   </div>
@@ -21,7 +21,7 @@ const defaultProps = {
 const data = reactive([
   {
     value: "SAT",
-    label: "SAT 问题",
+    label: "SAT ProblemDomain",
     children: [
       {
         value: "pg-525-2276-hyflex-3",
@@ -47,7 +47,7 @@ const data = reactive([
   },
   {
     value: "TSP",
-    label: "TSP 问题",
+    label: "TSP ProblemDomain",
     children: [
       {
         value: "pr299-hyflex-0",
@@ -73,7 +73,7 @@ const data = reactive([
   },
   {
     value: "FSP",
-    label: "FSP 问题",
+    label: "FSP ProblemDomain",
     children: [
       {
         value: "tai100_20_02",
@@ -99,7 +99,7 @@ const data = reactive([
   },
   {
     value: "QAP",
-    label: "QAP 问题",
+    label: "QAP ProblemDomain",
     children: [
       {
         value: "sko100a",

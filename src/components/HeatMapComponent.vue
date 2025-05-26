@@ -5,47 +5,50 @@
       :show-file-list="false" accept=".json,.txt">
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">
-        拖拽文件到此处或<em>点击选择文件</em>
+        <!-- 拖拽文件到此处或<em>点击选择文件</em> -->
+        Drag and drop files here or <em>click to select files</em>
       </div>
       <template #tip>
         <div class="el-upload__tip">
-          请上传JSON文件（.json或.txt）
+          Please upload a JSON file (.json or .txt)
+
         </div>
       </template>
     </el-upload>
 
     <!-- Or separator -->
-    <div class="or-separator">或</div>
+    <div class="or-separator">Or</div>
 
     <!-- Textarea input -->
-    <el-input v-model="jsonHeatMapResult" placeholder="请粘贴记录json对象数组，例如：[{...},{...}]" type="textarea"
-      :autosize="{ minRows: 4, maxRows: 10 }" />
+    <el-input v-model="jsonHeatMapResult"
+      placeholder=" Please paste the record json object array, for example: [{...},{...}]" type="textarea"
+      :autosize="{ minRows: 4, maxRows: 10 }" style="margin-bottom: 20px;" />
 
     <el-alert v-if="parseError" :title="parseError" type="error" show-icon class="mt-2" @close="parseError = ''" />
     <el-table :data="heatMapData" :cell-style="cellStyle" border>
-      <el-table-column label="序号" type="index" width="60" align="center" />
-      <el-table-column label="算法名称" prop="algorithmName" width="180" align="center"></el-table-column>
-      <el-table-column label="SAT分数" align="center">
+      <el-table-column label="Index" type="index" width="100" align="center" />
+      <el-table-column label="Hyper-Heuristic" prop="algorithmName" width="180" align="center"></el-table-column>
+      <el-table-column label="SAT" align="center">
         <template #default="{ row }">
           {{ row.scorePerProblem?.SAT?.toFixed(5) || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="TSP分数" align="center">
+      <el-table-column label="TSP" align="center">
         <template #default="{ row }">
           {{ row.scorePerProblem?.TSP?.toFixed(5) || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="FSP分数" align="center">
+      <el-table-column label="FSP" align="center">
         <template #default="{ row }">
           {{ row.scorePerProblem?.FSP?.toFixed(5) || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="QAP分数" align="center">
+      <el-table-column label="QAP" align="center">
         <template #default="{ row }">
           {{ row.scorePerProblem?.QAP?.toFixed(5) || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="算法总分" prop="totalScore" align="center" sortable>
+      <el-table-column label="Score" prop="totalScore" align="center" sortable>
         <template #default="{ row }">
           {{ row.totalScore?.toFixed(5) }}
         </template>

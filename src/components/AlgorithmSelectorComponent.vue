@@ -1,6 +1,6 @@
 <template>
   <div id="AlgorithmSelectorComponent">
-    <h4>算法设定：</h4>
+    <h4>Hyper-Heuristics Setting：</h4>
     <el-tree style="max-width: 600px" :data="data" show-checkbox node-key="value" :props="defaultProps"
       ref="AlgorithmTreeRef" :check-strictly="false" @check="handleCheckChange" />
   </div>
@@ -58,6 +58,42 @@ const data = reactive([
   {
     value: "XCJ",
     label: "XCJ",
+  },
+  {
+    value: "MCHH-S",
+    label: "MCHH-S",
+  },
+  {
+    value: "KSATS-HH",
+    label: "KSATS-HH",
+  },
+  {
+    value: "GenHive",
+    label: "GenHive",
+  },
+  {
+    value: "SA-ILS",
+    label: "SA-ILS",
+  },
+  {
+    value: "Ant-Q",
+    label: "Ant-Q",
+  },
+  {
+    value: "Clean",
+    label: "Clean",
+  },
+  {
+    value: "GISS",
+    label: "GISS",
+  },
+  {
+    value: "BiasILS",
+    label: "BiasILS",
+  },
+  {
+    value: "DynILS",
+    label: "DynILS",
   },
 ])
 
